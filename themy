@@ -697,7 +697,7 @@ validate_stage(){
   while IFS= read -r name; do
     [[ -n "$name" ]] || continue
     dir="$TEMPLATES_DIR/$name"
-    [[ -s "$stage/$name/.template-ok" ]] || fatal "template '$name' did not validate its staged output"
+    [[ -s "$stage/$name/.module-ok" ]] || fatal "template '$name' did not validate its staged output"
   done < "$stage/.template-list-ok"
 }
 

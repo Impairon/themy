@@ -4,7 +4,7 @@ from pathlib import Path
 
 stage_dir = Path(os.environ.get("THEMY_STAGE_DIR", "/tmp/themy-stage"))
 config_home = Path(os.environ.get("THEMY_XDG_CONFIG_HOME") or os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
-data_home = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share"))
+data_home = Path(os.environ.get("THEMY_XDG_DATA_HOME") or os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share"))
 
 def run_optional(cmd):
     """Run an optional command safely without crashing if missing or failing."""
@@ -46,24 +46,24 @@ if themy_conf.exists():
             cfg_file.parent.mkdir(parents=True, exist_ok=True)
             cfg_file.write_text("\n".join(lines[:i+1] + body + lines[end:]) + "\n", encoding="utf-8")
 
-# 2. Install single theme.colors to KDE / Dolphin color-schemes directory
+# 2. Install the Themy color scheme to KDE / Dolphin
 scheme_dir = data_home / "color-schemes"
 scheme_dir.mkdir(parents=True, exist_ok=True)
 
-themy_colors = stage_dir / "theme.colors"
+themy_colors = stage_dir / "themy.colors"
 if not themy_colors.exists():
-    for alt in ("Themy.colors", "themyMatugen.colors"):
+    for alt in ("Themy.colors", "theme.colors", "themyMatugen.colors"):
         if (stage_dir / alt).exists():
             themy_colors = stage_dir / alt
             break
 
 if themy_colors.exists():
-    dest_file = scheme_dir / "theme.colors"
+    dest_file = scheme_dir / "themy.colors"
     shutil.copy2(themy_colors, dest_file)
     # Remove older redundant duplicates so directory stays completely clean
-    for legacy in ("Themy.colors", "themyMatugen.colors", "themy.colors"):
+    for legacy in ("Themy.colors", "theme.colors", "themyMatugen.colors"):
         legacy_path = scheme_dir / legacy
-        if legacy_path.exists() and legacy_path.name != "theme.colors":
+        if legacy_path.exists() and legacy_path.name != "themy.colors":
             try:
                 legacy_path.unlink()
             except OSError:
@@ -85,15 +85,15 @@ body = lines[i+1:end]
 found = False
 for j, l in enumerate(body):
     if l.startswith("ColorScheme="):
-        body[j] = "ColorScheme=theme"
+        body[j] = "ColorScheme=themy"
         found = True
         break
 if not found:
-    body.append("ColorScheme=theme")
+    body.append("ColorScheme=themy")
 
 kdeglobals.parent.mkdir(parents=True, exist_ok=True)
 kdeglobals.write_text("\n".join(lines[:i+1] + body + lines[end:]) + "\n", encoding="utf-8")
-print(f"[qt] Set ColorScheme=theme in {kdeglobals}")
+print(f"[qt] Set ColorScheme=themy in {kdeglobals}")
 
 # 4. Environment variables
 envdir = config_home / "environment.d"
