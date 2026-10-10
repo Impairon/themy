@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mkdir -p "$THEMY_STAGE_DIR"
+"$THEMY_ROOT/internals/render-template.py" \
+  "$THEMY_MODULE_DIR/templates/example.conf" \
+  "$THEMY_STAGE_DIR/example.conf" \
+  "$THEMY_PALETTE"
+printf 'ok\n' > "$THEMY_STAGE_DIR/.module-ok"

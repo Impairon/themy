@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+file="${THEMY_XDG_CONFIG_HOME:-$HOME/.config}/themy-example/example.conf"
+mkdir -p "$THEMY_BACKUP_DIR"
+if [[ -f "$file" ]]; then
+  cp -a -- "$file" "$THEMY_BACKUP_DIR/example.conf"
+else
+  : > "$THEMY_BACKUP_DIR/example.conf.missing"
+fi
