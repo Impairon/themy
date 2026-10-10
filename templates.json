@@ -2,5 +2,6 @@
   "btop": true,
   "gtk": true,
   "qt": true,
-  "yazi": true
+  "yazi": true,
+  "example": false
 }

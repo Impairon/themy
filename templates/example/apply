@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+root="${THEMY_XDG_CONFIG_HOME:-$HOME/.config}/themy-example"
+mkdir -p "$root"
+cp -- "$THEMY_STAGE_DIR/example.conf" "$root/example.conf"
